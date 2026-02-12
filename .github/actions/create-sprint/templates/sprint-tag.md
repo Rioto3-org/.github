@@ -1,4 +1,4 @@
-TITLE: 【Sprint】② Tag Creation
+TITLE: 【Sprint】③ Tag Creation
 
 # Sprint Tag Creation
 
