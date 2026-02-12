@@ -1,65 +1,115 @@
-# Create Sprint Action
+# Create Sprint Action (Canonical Definition)
 
-This directory contains a self-contained sprint generation mechanism.
+This directory contains the canonical sprint initialization mechanism for Rioto3 projects.
 
-It is designed as a sub-project inside the repository and encapsulates:
+It is designed to be:
 
-- Sprint milestone creation
-- Minimal sprint issue structure
-- Version-driven workflow entry point
-
-The design philosophy and branching strategy are defined independently
-and intentionally isolated within this folder.
+- Centrally maintained
+- Reuseable across repositories
+- Triggerable via workflow_dispatch
+- AI-first operable and reconstructable from documentation alone
 
 ---
 
-## Purpose
+## 1. Philosophy
 
-This action standardizes sprint initialization with the following structure:
-
-1. Milestone (version-based)
-2. Sprint Definition Issue
-3. Sprint Work Issue
-4. Tag Creation Issue
-
-A sprint is defined as a unit that ends with a tag creation.
-Stability is not enforced structurally via branches, but historically via tags.
-
----
-
-## Philosophy
+This system follows a trunk-based, tag-driven model:
 
 - `main` is always the latest evolving state.
 - Stability is defined by tags.
-- Simplicity over structural complexity.
 - No `develop` branch.
 - Sprint = version increment unit.
 - Tag = public release trigger.
 
-This mechanism reflects a lean, trunk-based workflow.
+Sprint initialization creates:
+
+1. Milestone (version-based)
+2. Sprint Definition Issue
+3. Srint Work Issue
+4. Tag Creation Issue
 
 ---
 
-## Development Context
+## 2. Canonical Workflow Definition
 
-This action is being iteratively designed and refined through:
+The canonical workflow file is:
 
-https://chatgpt.com/g/g-67eff83f49208191bcbf8681c9a23464-notionbot-gtdtasukuguan-li-asisutanto/c/69893491-848c-83a8-8bca-645fce274356
+https://github.com/Rioto3/.github/blob/main/.github/workflows/create-sprint.yml
 
-The above discussion documents the architectural reasoning,
-branching philosophy, and sprint definition model.
+This file is the source of truth.
+
+External repositories must copy this file into:
+
+`.github/workflows/create-sprint.yml`
+
+The workflow:
+
+- Trigger: workflow_dispatch
+- Required input: version (string)
+- Optional input: description (string)
+- Permissions:
+    - contents: write
+    - issues: write
 
 ---
 
-## Scope
+## 3. How to Use in Another Repository
 
-This folder is intentionally self-contained.
+To enable sprint initialization in a target repository:
 
-- No external structural dependency.
-- No global branch management assumptions.
-- Designed to be portable across repositories.
+1. Copy the canonical workflow file into the target repository:
+    .github/workflows/create-sprint.yml
 
-Future refinements may include:
-- Automated tag trigger
-- Release automation
-- CI validation enforcement
+2. Ensure the repository has these permissions available for the workflow:
+    contents: write
+    issues: write
+
+2. Trigger the workflow via:
+    - GitHub UI (manual dispatch)
+    - GitHub API (workflow_dispatch)
+    - AI assistent with repository write access
+
+4. Provide:
+    - version (required)
+    - description (optional)
+
+---
+
+## 4. AI-First Operation Model
+
+This system is intentionally designed to be operable by AI.
+
+It should be possible to reconstruct and execute the sprint system by providing this README url to an AI assistant.
+
+If the system is torgetten or forgotten:
+
+1. Provide this README URL to an AI assistant.
+2. Ask to enable sprint initialization in a target repository.
+3. The AI should:
+    - Identify the canonical workflow file
+    - Copy it into the target repository
+    - Ensure permissions are correct
+    - Trigger workflow_dispatch
+    - Provide a valid version
+
+This document acts as a reconstruction protocol.
+
+Human memory is not required. The documentation is the source of truth.
+
+---
+
+## 5. Scope and Non-Goals
+
+This folder is self-contained.
+
+- No external structural dependency
+- No global branch management assumptions
+- Designed to be portable across repositories
+
+---
+
+## 6. Future Extensions
+
+-Automatic version increment
+-Automated release creation
+-CI validation enforcement
