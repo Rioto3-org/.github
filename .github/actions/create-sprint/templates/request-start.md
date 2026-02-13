@@ -1,4 +1,4 @@
-TITLE: 【Request】] Start
+TITLE: 【Request】Start
 
 # Request Start
 

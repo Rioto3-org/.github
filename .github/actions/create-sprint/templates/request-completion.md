@@ -1,4 +1,4 @@
-TITLE: 【Request】] Completion
+TITLE: 【Request】Completion
 
 
 # Request Completion
