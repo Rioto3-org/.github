@@ -4,11 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       title:
-        description: "Natural language request title"
+        description: "Request title"
         required: true
         type: string
-      intent:
-        description: "Optional detailed background or intent"
+      background:
+        description: "Markdown-enabled background (use ### or smaller headings)"
+        required: false
+        type: string
+      approach:
+        description: "Markdown-enabled approach (use ### or smaller headings)"
         required: false
         type: string
       branch_name:
@@ -31,5 +35,6 @@ jobs:
         uses: Rioto3/.github/.github/actions/create-request@main
         with:
           title: ${{ github.event.inputs.title }}
-          intent: ${{ github.event.inputs.intent }}
+          background: ${{ github.event.inputs.background }}
+          approach: ${{ github.event.inputs.approach }}
           branch_name: ${{ github.event.inputs.branch_name }}
