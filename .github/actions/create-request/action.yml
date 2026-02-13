@@ -102,9 +102,9 @@ runs:
           async function fetchTemplate(path) {
             const resp = await github.rest.repos.getContent({
               owner,
-              repo,
+              repo: ".github",
               path,
-              ref: finalBranch
+              ref: "main"
             });
             return Buffer.from(resp.data.content, "base64").toString("utf8");
           }
