@@ -1,18 +1,18 @@
 name: "Initialize Request"
-description: "Create a new branch, add .create-request marker, and open a Draft Pull Request"
+description: "Create a new branch, add .create-request marker, and open a structured Draft Pull Request"
 
 inputs:
   title:
     description: "Request title"
-    required: true
-  intent:
-    description: "Optional detailed description"
+    required: true  background:
+    description: "Markdown-enabled background (use ### or smaller headings)"
+    required: false
+  approach:
+    description: "Markdown-enabled approach (use ### or smaller headings)"
     required: false
   branch_name:
     description: "Optional branch name override (without prefix)"
-    required: false
-
-outputs:
+    required: falseoutputs:
   branch_name:
     description: "Created branch name"
     value: ${{ steps.initialize.outputs.branch_name }}
@@ -31,7 +31,8 @@ runs:
       uses: actions/github-script@v7
       env:
         INPUT_TITLE: ${{ inputs.title }}
-        INPUT_INTENT: ${{ inputs.intent }}
+        INPUT_BACKGROUND: ${{ inputs.background }}
+        INPUT_APPROACH: ${{ inputs.approach }}
         INPUT_BRANCH_NAME: ${{ inputs.branch_name }}
         REPO_OWNER: ${{ github.repository_owner }}
         REPO_NAME: ${{ github.event.repository.name }}
@@ -41,7 +42,9 @@ runs:
           const repo = process.env.REPO_NAME;
           const title = process.env.INPUT_TITLE;
           if (!title) throw new Error("title is required");
-          const intent = process.env.INPUT_INTENT || "";
+
+          const background = process.env.INPUT_BACKGROUND || "";
+          const approach = process.env.INPUT_APPROACH || "";
           const branchOverride = process.env.INPUT_BRANCH_NAME;
 
           const repoInfo = await github.rest.repos.get({ owner, repo });
@@ -50,14 +53,14 @@ runs:
           const { data: refData } = await github.rest.git.getRef({
             owner,
             repo,
-            ref: `heads/${defaultBranch}`
+            ref: aheads/${defaultBranch}
           });
           const baseSha = refData.object.sha;
 
           function slugify(str) {
             return str
               .toLowerCase()
-              .replace(/[^a-z]0-9-]/g, "")
+              .replace(/[^a-z0-9-]/g, "")
               .trim()
               .replace(/\s+/g, "-");
           }
@@ -83,17 +86,27 @@ runs:
             branch: finalBranch
           });
 
+          let body = "";
+
+          if (background) {
+            body += "## Background\n\n" + background + "\n\n";
+          }
+
+          if (approach) {
+            body += "## Approach\n\n" + approach + "\n";
+          }
+
           const prResp = await github.rest.pulls.create({
             owner,
             repo,
             title,
             head: finalBranch,
             base: defaultBranch,
-            body: intent,
+            body: body,
             draft: true
           });
 
           core.setOutput("branch_name", finalBranch);
-          core.setOutput("pr_number", prResp.data.number);
+          core.setOutput("pr_number", preResp.data.number);
           core.setOutput("pr_url", prResp.data.html_url);
         
