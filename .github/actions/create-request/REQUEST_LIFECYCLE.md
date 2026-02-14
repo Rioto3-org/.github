@@ -137,17 +137,48 @@ The AI does not merge autonomously. The final merge action belongs to the user.
 
 ## 5. Adoption in Another Repository
 
-An AI with GitHub interface can adopt this model by:
+To adopt this PR-centric request model in another repository:
 
-1. Copying `.github/actions/create-request` directory
-2. Copying `.github/workflows/initialize-request.yml` file
-3. Enabling pull-requests: write permissions for GitHub Actions.
+**Copy ONLY this file:**
 
-Upon copy, the repository automatically supports:
+```
+.github/workflows/initialize-request.yml
+```
 
-- Structured request initialization
-- PR-based management
-- AI-aligned operation
+**Do NOT copy:**
+
+- `.github/actions/create-request/` directory
+- `REQUEST_LIFECYCLE.md`
+
+**Why?**
+
+The action implementation lives in the `Rioto3/.github` repository and is shared across all repositories via the `uses:` directive:
+
+```yaml
+uses: Rioto3/.github/.github/actions/create-request@main
+```
+
+Copying the action directory would create a duplicate that becomes outdated when the shared action is updated.
+
+**Setup Steps:**
+
+1. Copy `.github/workflows/initialize-request.yml` to your repository
+2. Verify the workflow contains: `uses: Rioto3/.github/.github/actions/create-request@main`
+3. Enable GitHub Actions permissions in repository settings:
+   - `Settings` → `Actions` → `General` → `Workflow permissions`
+   - Select "Read and write permissions"
+   - Check "Allow GitHub Actions to create and approve pull requests"
+
+Upon copying the workflow file, your repository automatically supports:
+
+- Structured request initialization via `Actions` → `Initialize Request`
+- PR-based management following this architecture
+- AI-aligned operation as defined in this document
+
+**Reference the shared documentation:**
+
+- Action implementation: `https://github.com/Rioto3/.github/tree/main/.github/actions/create-request`
+- This document: `https://github.com/Rioto3/.github/blob/main/.github/actions/create-request/REQUEST_LIFECYCLE.md`
 
 ---
 
