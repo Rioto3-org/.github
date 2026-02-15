@@ -1,5 +1,15 @@
 # PR-Centric Request Architecture
 
+## Prerequisites
+
+**This system is designed exclusively for repositories in the `Rioto3-org` organization.**
+
+- ✅ All new repositories must be created within the `Rioto3-org` organization
+- ✅ Personal account repositories are not supported
+- ✅ Workflow Templates are only available within the organization
+
+---
+
 This document defines the PR-centric management model used in this repository.
 
 The purpose of this document is not to explain implementation details, but to define the management architecture so that AI systems with GitHub interfaces can immediately understand:
@@ -135,50 +145,63 @@ The AI does not merge autonomously. The final merge action belongs to the user.
 
 ---
 
-## 5. Adoption in Another Repository
+## 5. Adoption Flow (New Repository Setup)
 
-To adopt this PR-centric request model in another repository:
+### Prerequisites
 
-**Copy ONLY this file:**
+- Repository must be created within the `Rioto3-org` organization
+- Repositories outside the organization cannot use this system
 
-```
-.github/workflows/initialize-request.yml
-```
+### Step 1: Add Initialize Request Workflow
 
-**Do NOT copy:**
+**⚠️ This operation must be performed by the user (cannot be automated by AI)**
 
-- `.github/actions/create-request/` directory
-- `REQUEST_LIFECYCLE.md`
+#### Instructions
 
-**Why?**
+1. Open the repository's **Actions** tab
+2. Click **New workflow**
+3. Scroll down to find the **By Rioto3-org** section
+4. Select the **Initialize Request** template
+5. Click the **Configure** button
+6. Review the file content (usually no changes needed)
+7. Click **Commit changes**
 
-The action implementation lives in the `Rioto3/.github` repository and is shared across all repositories via the `uses:` directive:
+→ This automatically adds `.github/workflows/initialize-request.yml` to your repository
 
-```yaml
-uses: Rioto3/.github/.github/actions/create-request@main
-```
+#### Why User Action Is Required
 
-Copying the action directory would create a duplicate that becomes outdated when the shared action is updated.
+- The GitHub UI "Configure" button cannot be triggered via API
+- Using Workflow Templates ensures you always get the latest version
+- Prevents copy-paste errors from manual file duplication
 
-**Setup Steps:**
+### Step 2: Create Requests (AI-Assisted)
 
-1. Copy `.github/workflows/initialize-request.yml` to your repository
-2. Verify the workflow contains: `uses: Rioto3/.github/.github/actions/create-request@main`
-3. Enable GitHub Actions permissions in repository settings:
-   - `Settings` → `Actions` → `General` → `Workflow permissions`
-   - Select "Read and write permissions"
-   - Check "Allow GitHub Actions to create and approve pull requests"
+After adding the workflow, you can ask AI to create requests.
 
-Upon copying the workflow file, your repository automatically supports:
+See **Section 3. Structured PR Format** for details.
 
-- Structured request initialization via `Actions` → `Initialize Request`
-- PR-based management following this architecture
-- AI-aligned operation as defined in this document
+### Troubleshooting
 
-**Reference the shared documentation:**
+#### Q: "By Rioto3-org" section does not appear
 
-- Action implementation: `https://github.com/Rioto3/.github/tree/main/.github/actions/create-request`
-- This document: `https://github.com/Rioto3/.github/blob/main/.github/actions/create-request/REQUEST_LIFECYCLE.md`
+**Possible causes and solutions:**
+
+1. **Repository is not in the organization**
+   - Verify repository ownership in settings
+   - Personal account repositories cannot use this feature
+
+2. **GitHub cache delay**
+   - Wait 1 hour and try again
+   - Clear browser cache
+
+3. **`.github` repository is not Public**
+   - Visit https://github.com/Rioto3-org/.github/settings
+   - Verify visibility is set to Public
+
+#### Q: Template appears but Configure button does not work
+
+- Verify repository has Actions permissions enabled
+- Check organization-level Actions settings
 
 ---
 
