@@ -10,7 +10,7 @@ The copied workflow does not contain the full request initialization logic by it
 
 `Rioto3/.github/.github/actions/create-request@main`
 
-That Action is responsible for the Request Lifecycle initialization defined in `.github/actions/create-request/REQUEST_LIFECYCLE.md`, including:
+That Action is responsible for the Request Lifecycle initialization defined in `docs/REQUEST_LIFECYCLE.md`, including:
 
 - creating a `request/<name>` branch from the default branch
 - creating an empty commit so a PR can be opened immediately
